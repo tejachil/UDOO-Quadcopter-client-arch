@@ -1,3 +1,4 @@
+var SERVER_HOST = '192.168.1.10';
 var SERVER_PORT = 33333;
 var CLIENT_PORT = 33334;
 var JOYSTICK_DEADZONE = 3500;
@@ -33,9 +34,9 @@ joystick.on('button', function (stream) {
 
 		messageText = 'BTN ' + messageText;
 		var message = new Buffer(messageText);
-		client.send(message, 0, message.length, SERVER_PORT, HOST, function(err, bytes) {
+		client.send(message, 0, message.length, SERVER_PORT, SERVER_HOST, function(err, bytes) {
 			if (err) throw err;
-			console.log(messageText + ' sent to ' + HOST +':'+ SERVER_PORT);
+			console.log(messageText + ' sent to ' + SERVER_HOST +':'+ SERVER_PORT);
 		});
 	}
 });
@@ -63,8 +64,8 @@ joystick.on('axis', function (stream) {
 
 	messageText = 'AXIS ' + messageText + ' ' + parseInt((parseInt(stream.value)*100.0/JOYSTICK_DEADZONE));
 	var message = new Buffer(messageText);
-	client.send(message, 0, message.length, SERVER_PORT, HOST, function(err, bytes) {
+	client.send(message, 0, message.length, SERVER_PORT, SERVER_HOST, function(err, bytes) {
 		if (err) throw err;
-		console.log(messageText + ' sent to ' + HOST +':'+ SERVER_PORT);
+		console.log(messageText + ' sent to ' + SERVER_HOST +':'+ SERVER_PORT);
 	});
 });
