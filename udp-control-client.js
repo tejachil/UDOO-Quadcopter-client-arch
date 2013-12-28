@@ -1,4 +1,3 @@
-var HOST = '127.0.0.1';
 var SERVER_PORT = 33333;
 var CLIENT_PORT = 33334;
 var JOYSTICK_DEADZONE = 3500;
@@ -11,7 +10,7 @@ client.on( "message", function (message, remote) {
     console.log(remote.address + ':' + remote.port +' - ' + message);
 });
 
-client.bind(CLIENT_PORT, HOST);
+client.bind(CLIENT_PORT);
 
 var joystick = new (require('joystick'))(0, JOYSTICK_DEADZONE, JOYSTICK_SENSITIVITY);
 joystick.on('button', function (stream) {
@@ -40,6 +39,7 @@ joystick.on('button', function (stream) {
 		});
 	}
 });
+
 joystick.on('axis', function (stream) {
 	var messageText = stream.number;
 	switch (stream.number){
