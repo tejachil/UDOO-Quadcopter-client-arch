@@ -2,7 +2,7 @@ var SERVER_HOST = '192.168.1.10';
 var SERVER_PORT = 33333;
 var CLIENT_PORT = 33334;
 var JOYSTICK_DEADZONE = 3500;
-var JOYSTICK_SENSITIVITY = 200;
+var JOYSTICK_SENSITIVITY = 0;
 
 var dgram = require('dgram');
 var client = dgram.createSocket('udp4');
