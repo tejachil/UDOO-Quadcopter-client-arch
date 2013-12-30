@@ -21,6 +21,9 @@
 
 import processing.opengl.*;
 import processing.serial.*;
+import hypermedia.net.*;
+
+UDP udp;  // define the UDP object
 
 // IF THE SKETCH CRASHES OR HANGS ON STARTUP, MAKE SURE YOU ARE USING THE RIGHT SERIAL PORT:
 // 1. Have a look at the Processing console output of this sketch.
@@ -39,9 +42,44 @@ float roll = 0.0f;
 float yawOffset = 0.0f;
 
 PFont font;
-Serial serial;
+UDPSerial serial;
 
 boolean synched = false;
+
+
+class UDPSerial{
+  public byte[] dataUDP;
+  public int dataSize;
+  public int readCount;
+  public UDPSerial(){
+    dataSize = 0;
+    readCount = 0;
+  }
+  
+  
+  public int available(){
+     return dataSize; 
+  }
+  
+  public byte read(){
+    print("read " + readCount + " " + dataSize + " : ");
+    if(readCount < dataSize){
+      readCount++;
+      println(char(dataUDP[readCount-1]));
+      return dataUDP[readCount-1];
+      
+    }
+    else return -1;
+  }
+  
+  public void write(String data){
+    udp.send(data, "192.168.1.8", 33333);
+  }
+  
+  public void clear(){
+  
+  }
+}
 
 void drawArrow(float headWidthFactor, float headLengthFactor) {
   float headWidth = headWidthFactor * 200.0f;
@@ -113,10 +151,11 @@ void drawBoard() {
 }
 
 // Skip incoming serial stream data until token is found
-boolean readToken(Serial serial, String token) {
+/*boolean readToken(UDPSerial serial, String token) {
   // Wait until enough bytes are available
-  if (serial.available() < token.length())
-    return false;
+  //println(serial.available());
+  //if (serial.available() < token.length())
+  //  return false;
   
   // Check if incoming bytes match token
   for (int i = 0; i < token.length(); i++) {
@@ -125,7 +164,7 @@ boolean readToken(Serial serial, String token) {
   }
   
   return true;
-}
+}*/
 
 // Global setup
 void setup() {
@@ -142,14 +181,41 @@ void setup() {
   fill(50);
   
   // Setup serial port I/O
-  println("AVAILABLE SERIAL PORTS:");
+  /*println("AVAILABLE SERIAL PORTS:");
   println(Serial.list());
   String portName = Serial.list()[SERIAL_PORT_NUM];
   println();
   println("HAVE A LOOK AT THE LIST ABOVE AND SET THE RIGHT SERIAL PORT NUMBER IN THE CODE!");
   println("  -> Using port " + SERIAL_PORT_NUM + ": " + portName);
-  serial = new Serial(this, portName, SERIAL_PORT_BAUD_RATE);
+  serial = new Serial(this, portName, SERIAL_PORT_BAUD_RATE);*/
+
+  udp = new UDP( this, 33335 , "192.168.1.8");  // create datagram connection on port 33335   
+  //udp.log( true );            // <-- print out the connection activity
+  udp.listen( true );           // and wait for incoming message
+  
+  serial = new UDPSerial();
 }
+
+
+void receive( byte[] data ) {           // <-- default handler
+    //if(serial.readCount >= serial.dataSize){
+      serial.dataUDP = data;
+      serial.dataSize = serial.dataUDP.length;
+      serial.readCount = 0;
+    //}
+    String dataStr = new String(data);
+    yaw = Float.parseFloat(dataStr.substring(dataStr.indexOf('=')+1, dataStr.indexOf(',')));
+    dataStr = dataStr.substring(dataStr.indexOf(',')+1);
+    pitch = Float.parseFloat(dataStr.substring(0, dataStr.indexOf(',')));
+    dataStr = dataStr.substring(dataStr.indexOf(',')+1);
+    roll = Float.parseFloat(dataStr.substring(0));
+    
+    println(new String(data));
+      /*for(int i=0; i < data.length; i++)
+       print(char(data[i]));
+      println();*/
+}
+
 
 void setupRazor() {
   println("Trying to setup and synch Razor...");
@@ -162,16 +228,17 @@ void setupRazor() {
   delay(3000);  // 3 seconds should be enough
   
   // Set Razor output parameters
-  serial.write("#ob");  // Turn on binary output
+  //serial.write("#ob");  // Turn on binary output
+  serial.write("#ot");  // Turn on text output
   serial.write("#o1");  // Turn on continuous streaming output
   serial.write("#oe0"); // Disable error message output
   
   // Synch with Razor
-  serial.clear();  // Clear input buffer up to here
-  serial.write("#s00");  // Request synch token
+  //serial.clear();  // Clear input buffer up to here
+  //serial.write("#s00");  // Request synch token
 }
 
-float readFloat(Serial s) {
+float readFloat(UDPSerial s) {
   // Convert from little endian (Razor) to big endian (Java) and interpret as float
   return Float.intBitsToFloat(s.read() + (s.read() << 8) + (s.read() << 16) + (s.read() << 24));
 }
@@ -190,16 +257,17 @@ void draw() {
     if (frameCount == 2)
       setupRazor();  // Set ouput params and request synch token
     else if (frameCount > 2)
-      synched = readToken(serial, "#SYNCH00\r\n");  // Look for synch token
+      synched = true;
+      //synched = readToken(serial, "#SYNCH00\r\n");  // Look for synch token
     return;
   }
   
   // Read angles from serial port
-  while (serial.available() >= 12) {
+  /*while (serial.available() >= 12) {
     yaw = readFloat(serial);
     pitch = readFloat(serial);
     roll = readFloat(serial);
-  }
+  }*/
 
   // Draw board
   pushMatrix();

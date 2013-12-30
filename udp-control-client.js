@@ -1,4 +1,4 @@
-var SERVER_HOST = '192.168.1.10';
+var SERVER_HOST = '192.168.1.8';
 var SERVER_PORT = 33333;
 var CLIENT_CONTROL_PORT = 33334;
 var CLIENT_AHRS_PORT = 33335;
@@ -34,7 +34,7 @@ joystick.on('button', function (stream) {
 			break;
 		}
 
-		messageText = 'BTN ' + messageText;
+		messageText = 'CONTROL BTN ' + messageText;
 		var message = new Buffer(messageText);
 		client.send(message, 0, message.length, SERVER_PORT, SERVER_HOST, function(err, bytes) {
 			if (err) throw err;
@@ -64,7 +64,7 @@ joystick.on('axis', function (stream) {
 		break;
 	}
 
-	messageText = 'AXIS ' + messageText + ' ' + parseInt((parseInt(stream.value)*100.0/JOYSTICK_DEADZONE));
+	messageText = 'CONTROL AXIS ' + messageText + ' ' + parseInt((parseInt(stream.value)*100.0/JOYSTICK_DEADZONE));
 	var message = new Buffer(messageText);
 	client.send(message, 0, message.length, SERVER_PORT, SERVER_HOST, function(err, bytes) {
 		if (err) throw err;
