@@ -1,6 +1,8 @@
 var SERVER_HOST = '192.168.1.10';
 var SERVER_PORT = 33333;
-var CLIENT_PORT = 33334;
+var CLIENT_CONTROL_PORT = 33334;
+var CLIENT_AHRS_PORT = 33335;
+
 var JOYSTICK_DEADZONE = 3500;
 var JOYSTICK_SENSITIVITY = 0;
 
@@ -11,7 +13,7 @@ client.on( "message", function (message, remote) {
     console.log(remote.address + ':' + remote.port +' - ' + message);
 });
 
-client.bind(CLIENT_PORT);
+client.bind(CLIENT_CONTROL_PORT);
 
 var joystick = new (require('joystick'))(0, JOYSTICK_DEADZONE, JOYSTICK_SENSITIVITY);
 joystick.on('button', function (stream) {
