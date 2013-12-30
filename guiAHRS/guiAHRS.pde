@@ -26,9 +26,10 @@ import processing.serial.*;
 // 1. Have a look at the Processing console output of this sketch.
 // 2. Look for the serial port list and find the port you need (it's the same as in Arduino).
 // 3. Set your port number here:
-final static int SERIAL_PORT_NUM = 0;
+final static int SERIAL_PORT_NUM = 4;
 // 4. Try again.
 
+final static int COPTER_GUI_SCALE_FACTOR = 30; // Scale factor for the box representation of the copter
 
 final static int SERIAL_PORT_BAUD_RATE = 57600;
 
@@ -80,19 +81,32 @@ void drawBoard() {
   pushMatrix();
 
   rotateY(-radians(yaw - yawOffset));
-  rotateX(-radians(pitch));
-  rotateZ(radians(roll)); 
+  rotateX(radians(pitch));
+  rotateZ(-radians(roll)); 
 
+  rotateY(radians(180));
+  
+  rotateY(radians(45));
+  fill(5, 5, 5);
+  box(20*COPTER_GUI_SCALE_FACTOR, 0.5*COPTER_GUI_SCALE_FACTOR, 0.5*COPTER_GUI_SCALE_FACTOR);
+  
+  rotateY(radians(90));
+  fill(5, 5, 5);
+  box(20*COPTER_GUI_SCALE_FACTOR, 0.5*COPTER_GUI_SCALE_FACTOR, 0.5*COPTER_GUI_SCALE_FACTOR);
+  
+  
+  rotateY(radians(45));
   // Board body
-  fill(255, 0, 0);
-  box(250, 20, 400);
+  fill(190, 190, 190, 50f);
+  box(5*COPTER_GUI_SCALE_FACTOR, 1*COPTER_GUI_SCALE_FACTOR, 5*COPTER_GUI_SCALE_FACTOR);
+  
   
   // Forward-arrow
   pushMatrix();
-  translate(0, 0, -200);
+  translate(0, 0, -2.5*COPTER_GUI_SCALE_FACTOR);
   scale(0.5f, 0.2f, 0.25f);
   fill(0, 255, 0);
-  drawArrow(1.0f, 2.0f);
+  drawArrow(1.0f, 1.0f);
   popMatrix();
     
   popMatrix();
@@ -122,8 +136,10 @@ void setup() {
   frameRate(50);
   
   // Load font
-  font = loadFont("Univers-66.vlw");
+  // font = loadFont("Univers-66.vlw");
+  font = createFont("Ariel", 32);
   textFont(font);
+  fill(50);
   
   // Setup serial port I/O
   println("AVAILABLE SERIAL PORTS:");
@@ -162,7 +178,7 @@ float readFloat(Serial s) {
 
 void draw() {
    // Reset scene
-  background(0);
+  background(65);
   lights();
 
   // Sync with Razor 
