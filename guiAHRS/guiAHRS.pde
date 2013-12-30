@@ -105,6 +105,9 @@ void drawBoard() {
   fill(190, 190, 190, 50f);
   box(5*COPTER_GUI_SCALE_FACTOR, 1*COPTER_GUI_SCALE_FACTOR, 5*COPTER_GUI_SCALE_FACTOR);
   
+  fill(16, 78, 140);
+  translate(0, -1*COPTER_GUI_SCALE_FACTOR, 0);
+  box(4.5*COPTER_GUI_SCALE_FACTOR, 1*COPTER_GUI_SCALE_FACTOR, 3.5*COPTER_GUI_SCALE_FACTOR);
   
   // Forward-arrow
   pushMatrix();
@@ -116,6 +119,8 @@ void drawBoard() {
     
   popMatrix();
 }
+
+
 
 // Global setup
 void setup() {
@@ -145,8 +150,6 @@ void receive( byte[] data ) {           // <-- default handler
     pitch = Float.parseFloat(dataStr.substring(0, dataStr.indexOf(',')));
     dataStr = dataStr.substring(dataStr.indexOf(',')+1);
     roll = Float.parseFloat(dataStr.substring(0));
-    
-    
 }
 
 
@@ -189,12 +192,12 @@ void draw() {
   drawBoard();
   popMatrix();
   
-  textFont(font, 20);
+  textFont(font, 12);
   fill(255);
   textAlign(LEFT);
 
   // Output info text
-  text("Point FTDI connector towards screen and press 'a' to align", 10, 25);
+  text("'a' to align\n'0' to turn off continuous, \n'1' to turn on continuous\n'f' to request one frame", 5, 15);
 
   // Output angles
   pushMatrix();
