@@ -20,13 +20,13 @@
 */
 
 import processing.opengl.*;
-import processing.serial.*;
+//import processing.serial.*;
 import hypermedia.net.*;
 
 UDP udp;  // define the UDP object
 
 final static int COPTER_GUI_SCALE_FACTOR = 30; // Scale factor for the box representation of the copter
-final static String SERVER_HOST = "192.168.1.8";
+final static String SERVER_HOST = "192.168.1.10";
 final static int SERVER_PORT = 33333;
 final static int CLIENT_AHRS_PORT = 33335;
 
@@ -87,8 +87,8 @@ void drawBoard() {
   pushMatrix();
 
   rotateY(-radians(yaw - yawOffset));
-  rotateX(radians(pitch));
-  rotateZ(-radians(roll)); 
+  rotateX(radians(roll));
+  rotateZ(radians(pitch)); 
 
   rotateY(radians(180));
   
@@ -111,7 +111,7 @@ void drawBoard() {
   
   // Forward-arrow
   pushMatrix();
-  translate(0, 0, -2.5*COPTER_GUI_SCALE_FACTOR);
+  translate(0, 1*COPTER_GUI_SCALE_FACTOR, -2.5*COPTER_GUI_SCALE_FACTOR);
   scale(0.5f, 0.2f, 0.25f);
   fill(0, 255, 0);
   drawArrow(1.0f, 1.0f);
@@ -151,7 +151,6 @@ void receive( byte[] data ) {           // <-- default handler
     dataStr = dataStr.substring(dataStr.indexOf(',')+1);
     roll = Float.parseFloat(dataStr.substring(0));
 }
-
 
 void setupRazor() {
   println("Trying to setup and synch Razor...");
