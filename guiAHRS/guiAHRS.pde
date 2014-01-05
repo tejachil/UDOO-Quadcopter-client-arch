@@ -152,7 +152,7 @@ void receive( byte[] data ) {           // <-- default handler
 }
 
 void setupRazor() {
-  println("Trying to setup and synch Razor...");
+  println("Trying to setup...");
   
   // On Mac OSX and Linux (Windows too?) the board will do a reset when we connect, which is really bad.
   // See "Automatic (Software) Reset" on http://www.arduino.cc/en/Main/ArduinoBoardProMini
@@ -175,7 +175,7 @@ void draw() {
   if (!synched) {
     textAlign(CENTER);
     fill(255);
-    text("Connecting to Razor...", width/2, height/2, -200);
+    text("Connecting to quadcopter...", width/2, height/2, -200);
     
     if (frameCount == 2)
       setupRazor();  // Set ouput params and request synch token
