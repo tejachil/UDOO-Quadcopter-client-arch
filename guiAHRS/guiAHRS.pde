@@ -20,7 +20,6 @@
 */
 
 import processing.opengl.*;
-//import processing.serial.*;
 import hypermedia.net.*;
 
 UDP udp;  // define the UDP object
@@ -87,8 +86,8 @@ void drawBoard() {
   pushMatrix();
 
   rotateY(-radians(yaw - yawOffset));
-  rotateX(radians(roll));
-  rotateZ(radians(pitch)); 
+  rotateX(-radians(pitch));
+  rotateZ(radians(roll)); 
 
   rotateY(radians(180));
   
