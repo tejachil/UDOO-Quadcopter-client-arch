@@ -72,7 +72,7 @@ joystick.on('axis', function (stream) {
 		case 0:
 		messageText = 'X';
 		roll = 1*parseFloat((parseFloat(stream.value)*9.0/JOYSTICK_DEADZONE)).toFixed(2);
-		break;
+		break;,
 		case 1:
 		messageText = 'Y';
 		pitch = 1*parseFloat((parseFloat(stream.value)*9.0/JOYSTICK_DEADZONE)).toFixed(2);
