@@ -72,7 +72,7 @@ joystick.on('axis', function (stream) {
 		case 0:
 		messageText = 'X';
 		roll = 1*parseFloat((parseFloat(stream.value)*9.0/JOYSTICK_DEADZONE)).toFixed(2);
-		break;,
+		break;
 		case 1:
 		messageText = 'Y';
 		pitch = 1*parseFloat((parseFloat(stream.value)*9.0/JOYSTICK_DEADZONE)).toFixed(2);
@@ -91,7 +91,7 @@ joystick.on('axis', function (stream) {
 		break;
 	}
 
-	messageText = 'CONTROL DYNAMICS #YPRT=' + yaw + ',' + pitch + ',' + roll + '::' + throttle[select];
+	messageText = '$CONTROL DYNAMICS #YPRT=' + yaw + ',' + pitch + ',' + roll + '::' + throttle[select];
 	var message = new Buffer(messageText);
 	client.send(message, 0, message.length, SERVER_PORT, SERVER_HOST, function(err, bytes) {
 		if (err) throw err;
