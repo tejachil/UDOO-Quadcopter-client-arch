@@ -13,7 +13,7 @@ var yaw = 0.00;
 var pitch = 0.00;
 var roll = 0.00;
 
-var throttle = ['AUTO', 0.00, 0.00];
+var throttle = [0.000, 1000.00, 1000.00];
 
 var select = 1;
 
@@ -71,15 +71,15 @@ joystick.on('axis', function (stream) {
 	switch (stream.number){
 		case 0:
 		messageText = 'X';
-		roll = 1*parseFloat((parseFloat(stream.value)*9.0/JOYSTICK_DEADZONE)).toFixed(2);
+		roll = parseFloat((parseFloat(stream.value)*9.0/JOYSTICK_DEADZONE)).toFixed(2);
 		break;
 		case 1:
 		messageText = 'Y';
-		pitch = 1*parseFloat((parseFloat(stream.value)*9.0/JOYSTICK_DEADZONE)).toFixed(2);
+		pitch = parseFloat((parseFloat(stream.value)*9.0/JOYSTICK_DEADZONE)).toFixed(2);
 		break;
 		case 2:
 		messageText = 'THROTTLE-LEFT';
-		throttle[1] = ((1-(parseFloat(stream.value)+32767.0)/(2.0*32767.0))*100.0).toFixed(2);
+		throttle[1] = (((1-(parseFloat(stream.value)+32767.0)/(2.0*32767.0))*800.0)+1070).toFixed(2);
 		break;
 		case 3:
 		messageText = 'Z';
@@ -87,7 +87,7 @@ joystick.on('axis', function (stream) {
 		break;
 		case 4:
 		messageText = 'THROTTLE-RIGHT';
-		throttle[2] = ((1-(parseFloat(stream.value)+32767.0)/(2.0*32767.0))*100.0).toFixed(2);
+		throttle[2] = (((1-(parseFloat(stream.value)+32767.0)/(2.0*32767.0))*800.0)+1070).toFixed(2);
 		break;
 	}
 
